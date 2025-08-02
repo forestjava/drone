@@ -32,9 +32,21 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
       (object) => {
         console.log('Battle Drone FBX model loaded successfully:', object);
         
+        // Calculate model bounds to debug size
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        console.log('Model original size:', size);
+        console.log('Model original center:', center);
+        
         // Scale and position the model appropriately for a drone
-        object.scale.setScalar(0.1); // Increased scale to make it more visible
+        object.scale.setScalar(2.5); // Much larger scale to make it clearly visible
         object.position.set(0, 0, 0);
+        
+        // Log new size after scaling
+        const scaledBox = new THREE.Box3().setFromObject(object);
+        const scaledSize = scaledBox.getSize(new THREE.Vector3());
+        console.log('Model scaled size:', scaledSize);
         
         // Enable shadows and configure materials
         object.traverse((child) => {
@@ -56,35 +68,58 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
               // Load textures
               const textureLoader = new THREE.TextureLoader();
               
+              // Set basic material properties first
+              material.color = new THREE.Color(0x808080);
+              material.metalness = 0.7;
+              material.roughness = 0.3;
+              
               textureLoader.load('/textures/Battle_Drone_albedo.png', (texture) => {
                 material.map = texture;
                 material.needsUpdate = true;
+                console.log('Albedo texture loaded');
+              }, undefined, (error) => {
+                console.warn('Failed to load albedo texture:', error);
               });
               
               textureLoader.load('/textures/Battle_Drone_normal.png', (texture) => {
                 material.normalMap = texture;
                 material.needsUpdate = true;
+                console.log('Normal texture loaded');
+              }, undefined, (error) => {
+                console.warn('Failed to load normal texture:', error);
               });
               
               textureLoader.load('/textures/Battle_Drone_roughness.png', (texture) => {
                 material.roughnessMap = texture;
                 material.needsUpdate = true;
+                console.log('Roughness texture loaded');
+              }, undefined, (error) => {
+                console.warn('Failed to load roughness texture:', error);
               });
               
               textureLoader.load('/textures/Battle_Drone_metallic.png', (texture) => {
                 material.metalnessMap = texture;
                 material.needsUpdate = true;
+                console.log('Metallic texture loaded');
+              }, undefined, (error) => {
+                console.warn('Failed to load metallic texture:', error);
               });
               
               textureLoader.load('/textures/Battle_Drone_ao.png', (texture) => {
                 material.aoMap = texture;
                 material.needsUpdate = true;
+                console.log('AO texture loaded');
+              }, undefined, (error) => {
+                console.warn('Failed to load AO texture:', error);
               });
               
               textureLoader.load('/textures/Battle_Drone_emit.png', (texture) => {
                 material.emissiveMap = texture;
-                material.emissive = new THREE.Color(0x444444);
+                material.emissive = new THREE.Color(0x222222);
                 material.needsUpdate = true;
+                console.log('Emissive texture loaded');
+              }, undefined, (error) => {
+                console.warn('Failed to load emissive texture:', error);
               });
               
               child.material = material;
