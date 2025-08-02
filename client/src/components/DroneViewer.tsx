@@ -13,6 +13,7 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
   const [droneModel, setDroneModel] = useState<THREE.Group | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [rotorBlades, setRotorBlades] = useState<THREE.Object3D[]>([]);
 
   // Current rotation states for smooth interpolation
   const currentRotation = useRef({
@@ -57,6 +58,37 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
         const finalCenter = finalBox.getCenter(new THREE.Vector3());
         console.log('Final model size:', finalSize);
         console.log('Final model center:', finalCenter);
+        
+        // Find rotor blades or propellers in the model
+        const rotors: THREE.Object3D[] = [];
+        object.traverse((child) => {
+          // Look for objects that might be rotors (common naming patterns)
+          const name = child.name.toLowerCase();
+          if (name.includes('rotor') || name.includes('propeller') || name.includes('blade') || 
+              name.includes('prop') || name.includes('fan') || name.includes('spinner')) {
+            rotors.push(child);
+            console.log('Found potential rotor:', child.name);
+          }
+        });
+        
+        // If no specific rotor names found, look for cylindrical geometries that could be rotors
+        if (rotors.length === 0) {
+          object.traverse((child) => {
+            if (child instanceof THREE.Mesh && child.geometry) {
+              // Check if it's a small cylindrical object (likely a rotor)
+              const bbox = new THREE.Box3().setFromObject(child);
+              const size = bbox.getSize(new THREE.Vector3());
+              // Look for objects that are wider than they are tall (rotor-like)
+              if ((size.x > size.y && size.z > size.y) || (size.z > size.y && size.x > size.y)) {
+                rotors.push(child);
+                console.log('Found potential rotor by geometry:', child.name || 'unnamed');
+              }
+            }
+          });
+        }
+        
+        setRotorBlades(rotors);
+        console.log('Total rotors found:', rotors.length);
         
         // Enable shadows and configure materials
         object.traverse((child) => {
@@ -201,6 +233,16 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
     // Add subtle hovering animation
     const hoverOffset = Math.sin(state.clock.elapsedTime * 2) * 0.05;
     groupRef.current.position.y += hoverOffset;
+    
+    // Animate rotor blades based on throttle
+    if (rotorBlades.length > 0) {
+      const rotorSpeed = (droneState.throttle / 100) * 20 + 2; // Base speed + throttle multiplier
+      rotorBlades.forEach((rotor, index) => {
+        // Alternate rotation direction for realism (some rotors spin opposite)
+        const direction = index % 2 === 0 ? 1 : -1;
+        rotor.rotation.y += delta * rotorSpeed * direction;
+      });
+    }
   });
 
   if (isLoading) {
