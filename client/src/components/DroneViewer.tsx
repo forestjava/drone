@@ -25,119 +25,90 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
   useEffect(() => {
     const loader = new FBXLoader();
     
-    // Try to load the battle drone model
-    const modelPaths = [
+    console.log('Loading Battle Drone FBX model...');
+    
+    loader.load(
       '/models/battle_drone.fbx',
-      '/attached_assets/uploads_files_3654680_Battle+Drone_1754177328485.fbx',
-      '/attached_assets/uploads_files_3654680_Battle+Drone_1754177504862.fbx'
-    ];
-
-    const loadModel = async (paths: string[]) => {
-      for (const path of paths) {
-        try {
-          console.log(`Attempting to load model from: ${path}`);
-          
-          const model = await new Promise<THREE.Group>((resolve, reject) => {
-            loader.load(
-              path,
-              (object) => {
-                console.log('Model loaded successfully:', object);
-                resolve(object);
-              },
-              (progress) => {
-                console.log('Loading progress:', (progress.loaded / progress.total * 100) + '% loaded');
-              },
-              (error) => {
-                console.log(`Failed to load from ${path}:`, error);
-                reject(error);
-              }
-            );
-          });
-
-          // Scale and position the model
-          model.scale.setScalar(0.01); // Adjust scale as needed
-          model.position.set(0, 0, 0);
-          
-          // Enable shadows
-          model.traverse((child) => {
-            if (child instanceof THREE.Mesh) {
-              child.castShadow = true;
-              child.receiveShadow = true;
+      (object) => {
+        console.log('Battle Drone FBX model loaded successfully:', object);
+        
+        // Scale and position the model appropriately for a drone
+        object.scale.setScalar(0.1); // Increased scale to make it more visible
+        object.position.set(0, 0, 0);
+        
+        // Enable shadows and configure materials
+        object.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+            
+            // Apply PBR materials with the drone textures
+            if (child.material) {
+              const material = new THREE.MeshStandardMaterial({
+                map: null, // Will be loaded dynamically
+                normalMap: null,
+                roughnessMap: null,
+                metalnessMap: null,
+                aoMap: null,
+                emissiveMap: null
+              });
               
-              // Ensure materials are properly lit
-              if (child.material) {
-                if (Array.isArray(child.material)) {
-                  child.material.forEach(mat => {
-                    if (mat instanceof THREE.MeshStandardMaterial) {
-                      mat.needsUpdate = true;
-                    }
-                  });
-                } else if (child.material instanceof THREE.MeshStandardMaterial) {
-                  child.material.needsUpdate = true;
-                }
-              }
+              // Load textures
+              const textureLoader = new THREE.TextureLoader();
+              
+              textureLoader.load('/textures/Battle_Drone_albedo.png', (texture) => {
+                material.map = texture;
+                material.needsUpdate = true;
+              });
+              
+              textureLoader.load('/textures/Battle_Drone_normal.png', (texture) => {
+                material.normalMap = texture;
+                material.needsUpdate = true;
+              });
+              
+              textureLoader.load('/textures/Battle_Drone_roughness.png', (texture) => {
+                material.roughnessMap = texture;
+                material.needsUpdate = true;
+              });
+              
+              textureLoader.load('/textures/Battle_Drone_metallic.png', (texture) => {
+                material.metalnessMap = texture;
+                material.needsUpdate = true;
+              });
+              
+              textureLoader.load('/textures/Battle_Drone_ao.png', (texture) => {
+                material.aoMap = texture;
+                material.needsUpdate = true;
+              });
+              
+              textureLoader.load('/textures/Battle_Drone_emit.png', (texture) => {
+                material.emissiveMap = texture;
+                material.emissive = new THREE.Color(0x444444);
+                material.needsUpdate = true;
+              });
+              
+              child.material = material;
             }
-          });
+          }
+        });
 
-          setDroneModel(model);
-          setIsLoading(false);
-          setError(null);
-          return;
-          
-        } catch (err) {
-          console.log(`Could not load model from ${path}`);
-          continue;
-        }
+        setDroneModel(object);
+        setIsLoading(false);
+        setError(null);
+      },
+      (progress) => {
+        const percent = (progress.loaded / progress.total * 100);
+        console.log('Loading progress:', percent + '% loaded');
+      },
+      (error) => {
+        console.error('Error loading Battle Drone FBX model:', error);
+        setError('Failed to load Battle Drone FBX model');
+        setIsLoading(false);
+        // Don't create fallback - just show error
       }
-      
-      // If all paths fail, create a fallback drone
-      console.log('All model paths failed, creating fallback drone');
-      createFallbackDrone();
-    };
-
-    loadModel(modelPaths);
+    );
   }, []);
 
-  // Create a fallback drone if FBX loading fails
-  const createFallbackDrone = () => {
-    const fallbackGroup = new THREE.Group();
-    
-    // Main body
-    const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.5, 0.2, 8);
-    const bodyMaterial = new THREE.MeshStandardMaterial({ color: '#333333' });
-    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-    body.castShadow = true;
-    body.receiveShadow = true;
-    fallbackGroup.add(body);
-
-    // Arms and propellers
-    const armPositions = [
-      [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1]
-    ];
-
-    armPositions.forEach(([x, y, z]) => {
-      // Arm
-      const armGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.8);
-      const armMaterial = new THREE.MeshStandardMaterial({ color: '#666666' });
-      const arm = new THREE.Mesh(armGeometry, armMaterial);
-      arm.position.set(x * 0.6, y, z * 0.6);
-      arm.rotation.z = x > 0 ? Math.PI / 4 : -Math.PI / 4;
-      arm.castShadow = true;
-      fallbackGroup.add(arm);
-
-      // Propeller
-      const propGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.02, 3);
-      const propMaterial = new THREE.MeshStandardMaterial({ color: '#999999' });
-      const prop = new THREE.Mesh(propGeometry, propMaterial);
-      prop.position.set(x, 0.3, z);
-      prop.castShadow = true;
-      fallbackGroup.add(prop);
-    });
-
-    setDroneModel(fallbackGroup);
-    setIsLoading(false);
-    setError('Using fallback drone model - FBX file could not be loaded');
-  };
 
   // Animation loop
   useFrame((state, delta) => {
@@ -185,15 +156,6 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
     // Add subtle hovering animation
     const hoverOffset = Math.sin(state.clock.elapsedTime * 2) * 0.05;
     groupRef.current.position.y += hoverOffset;
-
-    // Rotate propellers if using fallback drone
-    if (error) {
-      groupRef.current.children.forEach((child, index) => {
-        if (index > 4) { // Propellers are the last 4 children
-          child.rotation.y += delta * 20 * (droneState.throttle / 100 + 0.1);
-        }
-      });
-    }
   });
 
   if (isLoading) {
@@ -201,6 +163,15 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
       <mesh>
         <boxGeometry args={[1, 0.1, 1]} />
         <meshStandardMaterial color="#666666" />
+      </mesh>
+    );
+  }
+
+  if (error) {
+    return (
+      <mesh>
+        <boxGeometry args={[2, 0.5, 2]} />
+        <meshStandardMaterial color="#ff4444" />
       </mesh>
     );
   }
