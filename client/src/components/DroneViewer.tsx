@@ -39,14 +39,24 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
         console.log('Model original size:', size);
         console.log('Model original center:', center);
         
-        // Scale and position the model appropriately for a drone
-        object.scale.setScalar(2.5); // Much larger scale to make it clearly visible
-        object.position.set(0, 0, 0);
+        // Scale the model to a reasonable size for a drone (much smaller)
+        const targetSize = 3; // Target size in scene units
+        const maxDimension = Math.max(size.x, size.y, size.z);
+        const scale = targetSize / maxDimension;
+        object.scale.setScalar(scale);
+        console.log('Applied scale:', scale);
         
-        // Log new size after scaling
-        const scaledBox = new THREE.Box3().setFromObject(object);
-        const scaledSize = scaledBox.getSize(new THREE.Vector3());
-        console.log('Model scaled size:', scaledSize);
+        // Center the model at the origin
+        // First move to origin, then offset by the model's center to truly center it
+        object.position.set(-center.x * scale, -center.y * scale, -center.z * scale);
+        console.log('Model positioned at:', object.position);
+        
+        // Log final bounds
+        const finalBox = new THREE.Box3().setFromObject(object);
+        const finalSize = finalBox.getSize(new THREE.Vector3());
+        const finalCenter = finalBox.getCenter(new THREE.Vector3());
+        console.log('Final model size:', finalSize);
+        console.log('Final model center:', finalCenter);
         
         // Enable shadows and configure materials
         object.traverse((child) => {
@@ -180,7 +190,7 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
     
     groupRef.current.quaternion.copy(quaternion);
 
-    // Apply throttle as vertical movement
+    // Apply throttle as vertical movement (offset from model's base position)
     const targetY = (droneState.throttle / 100) * 3; // Scale throttle to reasonable height
     groupRef.current.position.y = THREE.MathUtils.lerp(
       groupRef.current.position.y,
