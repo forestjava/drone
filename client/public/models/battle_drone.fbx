@@ -1,0 +1,12 @@
+# This is a placeholder for the FBX model file.
+# The actual Battle Drone FBX model should be placed here.
+# Since the uploaded FBX files cannot be read as text, this placeholder
+# indicates where the model should be located in the file system.
+# 
+# The application will attempt to load the model from multiple possible paths:
+# - /models/battle_drone.fbx
+# - /attached_assets/uploads_files_3654680_Battle+Drone_1754177328485.fbx  
+# - /attached_assets/uploads_files_3654680_Battle+Drone_1754177504862.fbx
+#
+# If the FBX model cannot be loaded, the application will automatically
+# create a fallback procedural drone model for demonstration purposes.
