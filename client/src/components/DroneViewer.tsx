@@ -59,15 +59,17 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
         console.log('Final model size:', finalSize);
         console.log('Final model center:', finalCenter);
         
-        // Find rotor blades or propellers in the model
+        // Find only the actual propeller blades, not the motor housings
         const rotors: THREE.Object3D[] = [];
         object.traverse((child) => {
-          // Look for objects that might be rotors (common naming patterns)
           const name = child.name.toLowerCase();
-          if (name.includes('rotor') || name.includes('propeller') || name.includes('blade') || 
-              name.includes('prop') || name.includes('fan') || name.includes('spinner')) {
+          // Only include actual blades/props, exclude holders/motors/housings
+          if ((name.includes('rotor') || name.includes('propeller') || name.includes('blade') || 
+               name.includes('prop') || name.includes('fan') || name.includes('spinner')) &&
+              !name.includes('holder') && !name.includes('motor') && !name.includes('housing') &&
+              !name.includes('mount') && !name.includes('_end')) {
             rotors.push(child);
-            console.log('Found potential rotor:', child.name);
+            console.log('Found propeller blade:', child.name);
           }
         });
         
