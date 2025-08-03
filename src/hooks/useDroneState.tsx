@@ -19,27 +19,23 @@ export function useDroneState(): DroneState {
   const [roll, setRollState] = useState(0);
 
   const setThrottle = useCallback((value: number) => {
-    const clampedValue = Math.max(0, Math.min(100, value));
-    setThrottleState(clampedValue);
-    console.log('Throttle set to:', clampedValue);
+    setThrottleState(value);
+    console.log('Throttle set to:', value);
   }, []);
 
   const setYaw = useCallback((value: number) => {
-    const clampedValue = Math.max(-180, Math.min(180, value));
-    setYawState(clampedValue);
-    console.log('Yaw set to:', clampedValue);
+    setYawState(value);
+    console.log('Yaw set to:', value);
   }, []);
 
   const setPitch = useCallback((value: number) => {
-    const clampedValue = Math.max(-45, Math.min(45, value));
-    setPitchState(clampedValue);
-    console.log('Pitch set to:', clampedValue);
+    setPitchState(value);
+    console.log('Pitch set to:', value);
   }, []);
 
   const setRoll = useCallback((value: number) => {
-    const clampedValue = Math.max(-45, Math.min(45, value));
-    setRollState(clampedValue);
-    console.log('Roll set to:', clampedValue);
+    setRollState(value);
+    console.log('Roll set to:', value);
   }, []);
 
   const reset = useCallback(() => {

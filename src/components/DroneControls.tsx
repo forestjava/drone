@@ -3,9 +3,10 @@ import { DroneState } from '../hooks/useDroneState';
 
 interface DroneControlsProps {
   droneState: DroneState;
+  isControllerConnected: boolean;
 }
 
-export default function DroneControls({ droneState }: DroneControlsProps) {
+export default function DroneControls({ droneState, isControllerConnected }: DroneControlsProps) {
   const [isMinimized, setIsMinimized] = useState(false);
 
   const {
@@ -73,6 +74,15 @@ export default function DroneControls({ droneState }: DroneControlsProps) {
     transition: 'all 0.3s ease'
   };
 
+  const statusStyle = {
+    padding: '4px 8px',
+    borderRadius: '4px',
+    fontSize: '10px',
+    fontFamily: 'Inter, sans-serif',
+    fontWeight: 'bold' as const,
+    marginBottom: '12px'
+  };
+
   if (isMinimized) {
     return (
       <div style={panelStyle}>
@@ -90,22 +100,31 @@ export default function DroneControls({ droneState }: DroneControlsProps) {
 
   return (
     <div style={panelStyle}>
+      {/* Controller Status */}
+      <div style={{
+        ...statusStyle,
+        backgroundColor: isControllerConnected ? '#00ff00' : '#ff0000',
+        color: isControllerConnected ? '#000000' : '#ffffff'
+      }}>
+        {isControllerConnected ? '🎮 Controller Connected' : '❌ No Controller'}
+      </div>
+
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '20px'
       }}>
-        <h3 style={{ 
-          color: '#ffffff', 
-          margin: 0, 
+        <h3 style={{
+          color: '#ffffff',
+          margin: 0,
           fontFamily: 'Inter, sans-serif',
           fontSize: '16px'
         }}>
           Drone Controls
         </h3>
         <button
-          style={{...buttonStyle, padding: '4px 8px', fontSize: '10px'}}
+          style={{ ...buttonStyle, padding: '4px 8px', fontSize: '10px' }}
           onClick={() => setIsMinimized(true)}
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#444444'}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#333333'}
@@ -127,6 +146,7 @@ export default function DroneControls({ droneState }: DroneControlsProps) {
           value={throttle}
           onChange={(e) => setThrottle(Number(e.target.value))}
           style={sliderStyle}
+          disabled={isControllerConnected}
         />
       </div>
 
@@ -138,11 +158,12 @@ export default function DroneControls({ droneState }: DroneControlsProps) {
         </div>
         <input
           type="range"
-          min="-180"
-          max="180"
+          min="-270"
+          max="270"
           value={yaw}
           onChange={(e) => setYaw(Number(e.target.value))}
           style={sliderStyle}
+          disabled={isControllerConnected}
         />
       </div>
 
@@ -159,6 +180,7 @@ export default function DroneControls({ droneState }: DroneControlsProps) {
           value={pitch}
           onChange={(e) => setPitch(Number(e.target.value))}
           style={sliderStyle}
+          disabled={isControllerConnected}
         />
       </div>
 
@@ -175,6 +197,7 @@ export default function DroneControls({ droneState }: DroneControlsProps) {
           value={roll}
           onChange={(e) => setRoll(Number(e.target.value))}
           style={sliderStyle}
+          disabled={isControllerConnected}
         />
       </div>
 
@@ -206,10 +229,21 @@ export default function DroneControls({ droneState }: DroneControlsProps) {
         lineHeight: '1.4'
       }}>
         <strong>Controls:</strong><br />
-        • Throttle: Vertical movement (0-100%)<br />
-        • Yaw: Rotation around vertical axis<br />
-        • Pitch: Forward/backward tilt<br />
-        • Roll: Left/right tilt
+        {isControllerConnected ? (
+          <>
+            • Throttle: Axis 3 (0-100%)<br />
+            • Yaw: Axis 4 (+180° to -180°)<br />
+            • Pitch: Axis 1 (+45° to -45°)<br />
+            • Roll: Axis 0 (+45° to -45°)
+          </>
+        ) : (
+          <>
+            • Throttle: Vertical movement (0-100%)<br />
+            • Yaw: Rotation around vertical axis<br />
+            • Pitch: Forward/backward tilt<br />
+            • Roll: Left/right tilt
+          </>
+        )}
       </div>
     </div>
   );
