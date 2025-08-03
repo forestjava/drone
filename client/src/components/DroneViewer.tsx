@@ -232,8 +232,8 @@ export default function DroneViewer({ droneState }: DroneViewerProps) {
       delta * 2
     );
 
-    // Add subtle hovering animation
-    const hoverOffset = Math.sin(state.clock.elapsedTime * 2) * 0.05;
+    // Add subtle hovering animation (reduced)
+    const hoverOffset = Math.sin(state.clock.elapsedTime * 2) * 0.015;
     groupRef.current.position.y += hoverOffset;
     
     // Animate rotor blades based on throttle

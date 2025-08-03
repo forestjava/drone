@@ -36,15 +36,16 @@ function App() {
             <color attach="background" args={["#1a1a1a"]} />
 
             {/* Lighting */}
-            <ambientLight intensity={0.4} />
+            <ambientLight intensity={0.8} />
             <directionalLight
               position={[10, 10, 5]}
-              intensity={1}
+              intensity={1.5}
               castShadow
               shadow-mapSize-width={2048}
               shadow-mapSize-height={2048}
             />
-            <pointLight position={[-10, -10, -5]} intensity={0.5} />
+            <pointLight position={[-10, -10, -5]} intensity={0.8} />
+            <pointLight position={[10, -10, 5]} intensity={0.6} />
 
             <Suspense fallback={null}>
               <DroneViewer droneState={droneState} />
