@@ -39,7 +39,7 @@ function App() {
               shadows
               camera={{
                 position: [0, 5, 10],
-                fov: 45,
+                fov: 30,
                 near: 0.1,
                 far: 1000
               }}
@@ -67,7 +67,7 @@ function App() {
               </Suspense>
 
               {/* Ground plane for reference */}
-              <mesh receiveShadow position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+              <mesh receiveShadow position={[0, -3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
                 <planeGeometry args={[20, 20]} />
                 <meshStandardMaterial color="#333333" />
               </mesh>
