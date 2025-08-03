@@ -141,10 +141,11 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         </div>
         <input
           type="range"
-          min="0"
-          max="100"
-          value={throttle}
-          onChange={(e) => setThrottle(Number(e.target.value))}
+          min="-1"
+          max="1"
+          step="0.01"
+          value={(throttle / 100) * 2 - 1}
+          onChange={(e) => setThrottle(((Number(e.target.value) + 1) / 2) * 100)}
           style={sliderStyle}
           disabled={isControllerConnected}
         />
@@ -158,10 +159,11 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         </div>
         <input
           type="range"
-          min="-270"
-          max="270"
-          value={yaw}
-          onChange={(e) => setYaw(Number(e.target.value))}
+          min="-1"
+          max="1"
+          step="0.01"
+          value={-yaw / 180}
+          onChange={(e) => setYaw(-Number(e.target.value) * 180)}
           style={sliderStyle}
           disabled={isControllerConnected}
         />
@@ -175,10 +177,11 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         </div>
         <input
           type="range"
-          min="-45"
-          max="45"
-          value={pitch}
-          onChange={(e) => setPitch(Number(e.target.value))}
+          min="-1"
+          max="1"
+          step="0.01"
+          value={-pitch / 45}
+          onChange={(e) => setPitch(-Number(e.target.value) * 45)}
           style={sliderStyle}
           disabled={isControllerConnected}
         />
@@ -192,10 +195,11 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         </div>
         <input
           type="range"
-          min="-45"
-          max="45"
-          value={roll}
-          onChange={(e) => setRoll(Number(e.target.value))}
+          min="-1"
+          max="1"
+          step="0.01"
+          value={-roll / 45}
+          onChange={(e) => setRoll(-Number(e.target.value) * 45)}
           style={sliderStyle}
           disabled={isControllerConnected}
         />
@@ -229,22 +233,11 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         lineHeight: '1.4'
       }}>
         <strong>Controls:</strong><br />
-        {isControllerConnected ? (
-          <>
-            • Throttle: Axis 3 (0-100%)<br />
-            • Yaw: Axis 4 (+180° to -180°)<br />
-            • Pitch: Axis 1 (+45° to -45°)<br />
-            • Roll: Axis 0 (+45° to -45°)
-          </>
-        ) : (
-          <>
-            • Throttle: Vertical movement (0-100%)<br />
-            • Yaw: Rotation around vertical axis<br />
-            • Pitch: Forward/backward tilt<br />
-            • Roll: Left/right tilt
-          </>
-        )}
+        • Throttle: Vertical movement<br />
+        • Yaw: Rotation around vertical axis<br />
+        • Pitch: Forward/backward tilt<br />
+        • Roll: Left/right tilt
       </div>
-    </div>
+    </div >
   );
 }
