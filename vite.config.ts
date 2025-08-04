@@ -16,14 +16,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client", "src"),
-      "@shared": path.resolve(__dirname, "shared"),
+      "@": path.resolve(__dirname, "src"),
     },
-  },
-  root: path.resolve(__dirname, "client"),
-  build: {
-    outDir: path.resolve(__dirname, "dist/public"),
-    emptyOutDir: true,
   },
   // Add support for large models and audio files
   assetsInclude: ["**/*.gltf", "**/*.glb", "**/*.mp3", "**/*.ogg", "**/*.wav"],
