@@ -1,53 +1,63 @@
 import React from 'react';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
 
-// Cloud component
-function Cloud({ position, scale = 1 }: { position: [number, number, number], scale?: number }) {
-  const cloudRef = React.useRef<THREE.Group>(null);
-
-  // Gentle rotation animation using useFrame
-  useFrame((state) => {
-    if (cloudRef.current) {
-      cloudRef.current.rotation.y += 0.002;
-    }
-  });
-
-  return (
-    <group ref={cloudRef} position={position} scale={scale}>
-      {/* Multiple spheres to create cloud shape */}
-      <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[1.5, 16, 16]} />
-        <meshLambertMaterial color="#ffffff" transparent opacity={0.8} />
-      </mesh>
-      <mesh position={[1.2, 0.3, 0.5]}>
-        <sphereGeometry args={[1.2, 16, 16]} />
-        <meshLambertMaterial color="#ffffff" transparent opacity={0.7} />
-      </mesh>
-      <mesh position={[-1, 0.2, -0.3]}>
-        <sphereGeometry args={[1.0, 16, 16]} />
-        <meshLambertMaterial color="#ffffff" transparent opacity={0.75} />
-      </mesh>
-      <mesh position={[0.5, -0.5, 0.8]}>
-        <sphereGeometry args={[0.8, 16, 16]} />
-        <meshLambertMaterial color="#f8f8f8" transparent opacity={0.6} />
-      </mesh>
-      <mesh position={[-0.8, -0.3, -0.6]}>
-        <sphereGeometry args={[0.9, 16, 16]} />
-        <meshLambertMaterial color="#ffffff" transparent opacity={0.65} />
-      </mesh>
-    </group>
-  );
-}
-
-// Sky background component with clouds
+// Realistic sky background component
 export function SkyBackground() {
+  // Create a gradient texture for cloudy sky
+  const canvas = React.useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d')!;
+    
+    // Create gradient from light blue to white
+    const gradient = ctx.createLinearGradient(0, 0, 0, 512);
+    gradient.addColorStop(0, '#E6F3FF');    // Light blue at top
+    gradient.addColorStop(0.3, '#B8E0FF');  // Medium blue
+    gradient.addColorStop(0.7, '#87CEEB');  // Sky blue
+    gradient.addColorStop(1, '#FFFFFF');    // White at bottom (horizon)
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 512, 512);
+    
+    // Add some cloud patterns
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+    for (let i = 0; i < 20; i++) {
+      const x = Math.random() * 512;
+      const y = Math.random() * 300; // Only in upper part
+      const radius = 20 + Math.random() * 40;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    return canvas;
+  }, []);
+
+  const texture = React.useMemo(() => {
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    return texture;
+  }, [canvas]);
+
   return (
     <>
-      {/* Clear sky background */}
+      {/* Sky background with gradient and clouds */}
       <color attach="background" args={['#87CEEB']} />
       
-      {/* Additional lighting for bright day scene */}
+      {/* Large sky sphere with cloudy texture */}
+      <mesh position={[0, 0, 0]} scale={[200, 200, 200]}>
+        <sphereGeometry args={[1, 32, 16]} />
+        <meshBasicMaterial 
+          map={texture}
+          side={THREE.BackSide}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+      
+      {/* Lighting for bright day scene */}
       <ambientLight intensity={1.2} />
       <directionalLight
         position={[10, 20, 5]}
@@ -62,23 +72,6 @@ export function SkyBackground() {
         intensity={0.8}
         color="#CCE7FF"
       />
-
-      {/* Very visible test cloud directly in front */}
-      <mesh position={[3, 3, 2]}>
-        <sphereGeometry args={[1, 16, 16]} />
-        <meshLambertMaterial color="#ffffff" opacity={0.9} />
-      </mesh>
-      
-      {/* Another test cloud to the left */}
-      <mesh position={[-4, 4, 1]}>
-        <sphereGeometry args={[1.2, 16, 16]} />
-        <meshLambertMaterial color="#f0f0f0" opacity={0.8} />
-      </mesh>
-
-      {/* Background clouds */}
-      <Cloud position={[8, 8, -12]} scale={2.0} />
-      <Cloud position={[-10, 10, -15]} scale={1.5} />
-      <Cloud position={[12, 12, -18]} scale={1.8} />
     </>
   );
 }
