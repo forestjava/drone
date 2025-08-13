@@ -136,7 +136,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
       {/* Throttle Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Газ</span>
+          <span>Throttle</span>
           <span style={valueStyle}>{throttle.toFixed(0)}%</span>
         </div>
         <input
@@ -154,7 +154,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
       {/* Yaw Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Рысканье</span>
+          <span>Yaw</span>
           <span style={valueStyle}>{yaw.toFixed(0)}°</span>
         </div>
         <input
@@ -172,7 +172,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
       {/* Pitch Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Тангаж</span>
+          <span>Pitch</span>
           <span style={valueStyle}>{pitch.toFixed(0)}°</span>
         </div>
         <input
@@ -190,7 +190,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
       {/* Roll Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Крен</span>
+          <span>Roll</span>
           <span style={valueStyle}>{roll.toFixed(0)}°</span>
         </div>
         <input
@@ -233,10 +233,10 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         lineHeight: '1.4'
       }}>
         <strong>Управление:</strong><br />
-        • Газ: Вертикальное движение<br />
-        • Рысканье: Поворот вокруг вертикальной оси<br />
-        • Тангаж: Наклон вперед/назад<br />
-        • Крен: Наклон влево/вправо
+        • Throttle: Вертикальное движение<br />
+        • Yaw: Поворот вокруг вертикальной оси<br />
+        • Pitch: Наклон вперед/назад<br />
+        • Roll: Наклон влево/вправо
       </div>
     </div >
   );

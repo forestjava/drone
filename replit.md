@@ -1,6 +1,6 @@
 # Overview
 
-Battle Drone Simulator (Симулятор боевого дрона) is a web-based 3D drone simulation application built with React and Three.js. The application renders an interactive 3D drone model loaded from FBX files and provides real-time control through both web interface sliders and gamepad integration. Users can manipulate drone parameters including throttle (газ), yaw (рысканье), pitch (тангаж), and roll (крен) while viewing the changes in a realistic 3D environment with animated rotor blades and smooth interpolated movements. The interface has been fully localized to Russian language.
+Battle Drone Simulator (Симулятор боевого дрона) is a web-based 3D drone simulation application built with React and Three.js. The application renders an interactive 3D drone model loaded from FBX files and provides real-time control through both web interface sliders and gamepad integration. Users can manipulate drone parameters including Throttle, Yaw, Pitch, and Roll while viewing the changes in a realistic 3D environment with animated rotor blades and smooth interpolated movements. The interface has been localized to Russian language while keeping aviation terms in English.
 
 # User Preferences
 
