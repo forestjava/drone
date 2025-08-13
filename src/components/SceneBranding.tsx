@@ -169,7 +169,7 @@ export function BrandedPlatform() {
 
   return (
     <mesh receiveShadow position={[0, -3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[30, 30]} />
+      <planeGeometry args={[16, 16]} />
       <meshStandardMaterial 
         map={texture}
         roughness={0.9}
