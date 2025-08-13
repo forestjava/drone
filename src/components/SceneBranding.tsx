@@ -44,9 +44,9 @@ export function BrandedPlatform() {
 export function UIBranding() {
   return (
     <>
-      {/* Russian Flag in top right corner */}
+      {/* Russian Flag in bottom left corner */}
       <div
-        className="absolute top-4 right-4"
+        className="absolute bottom-4 left-4"
         style={{
           width: '80px',
           height: '53px',
