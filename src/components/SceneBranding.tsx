@@ -63,19 +63,22 @@ export function SkyBackground() {
         color="#CCE7FF"
       />
 
-      {/* Test visible cloud - close to camera */}
-      <mesh position={[0, 8, -8]}>
-        <sphereGeometry args={[2, 16, 16]} />
-        <meshLambertMaterial color="#ffffff" transparent opacity={0.7} />
+      {/* Very visible test cloud directly in front */}
+      <mesh position={[3, 3, 2]}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshLambertMaterial color="#ffffff" opacity={0.9} />
+      </mesh>
+      
+      {/* Another test cloud to the left */}
+      <mesh position={[-4, 4, 1]}>
+        <sphereGeometry args={[1.2, 16, 16]} />
+        <meshLambertMaterial color="#f0f0f0" opacity={0.8} />
       </mesh>
 
-      {/* More test clouds */}
+      {/* Background clouds */}
       <Cloud position={[8, 8, -12]} scale={2.0} />
       <Cloud position={[-10, 10, -15]} scale={1.5} />
       <Cloud position={[12, 12, -18]} scale={1.8} />
-      <Cloud position={[-15, 15, -10]} scale={2.2} />
-      <Cloud position={[5, 18, -20]} scale={1.3} />
-      <Cloud position={[-8, 6, -14]} scale={1.7} />
     </>
   );
 }
