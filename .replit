@@ -7,5 +7,17 @@ channel = "stable-24_05"
 packages = ["unzip"]
 
 [[ports]]
-localPort = 5173
+localPort = 3000
 externalPort = 80
+
+[workflows]
+runButton = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm start"
+waitForPort = 3000
