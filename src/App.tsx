@@ -6,6 +6,7 @@ import DroneViewer from "./components/DroneViewer";
 import DroneControls from "./components/DroneControls";
 import ControllerIntegration from "./components/ControllerIntegration";
 import { SkyBackground, BrandedPlatform, UIBranding } from "./components/SceneBranding";
+import { MilitaryBaseScene } from "./components/MilitaryBase";
 import { useDroneState } from "./hooks/useDroneState";
 
 // Компонент для получения статуса контроллера
@@ -56,8 +57,8 @@ function App() {
                 <DroneViewer droneState={droneState} />
               </Suspense>
 
-              {/* Branded platform with Russian flag */}
-              <BrandedPlatform />
+              {/* Military base scene */}
+              <MilitaryBaseScene />
             </Canvas>
 
             {/* Controller Integration and Controls */}
