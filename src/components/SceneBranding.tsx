@@ -1,12 +1,10 @@
 import React from 'react';
-import { useTexture } from '@react-three/drei';
-import * as THREE from 'three';
 
 // Sky background component
 export function SkyBackground() {
   return (
     <>
-      {/* Sky gradient background */}
+      {/* Clear sky background */}
       <color attach="background" args={['#87CEEB']} />
       
       {/* Additional lighting for bright day scene */}
@@ -28,23 +26,15 @@ export function SkyBackground() {
   );
 }
 
-// Platform with Russian flag texture
+// Clean platform 
 export function BrandedPlatform() {
-  const flagTexture = useTexture('/textures/russian_flag.png');
-  
-  React.useEffect(() => {
-    flagTexture.wrapS = THREE.RepeatWrapping;
-    flagTexture.wrapT = THREE.RepeatWrapping;
-    flagTexture.repeat.set(2, 1);
-  }, [flagTexture]);
-
   return (
     <mesh receiveShadow position={[0, -3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <planeGeometry args={[20, 20]} />
       <meshStandardMaterial 
-        map={flagTexture}
-        transparent={false}
-        opacity={0.8}
+        color="#f0f0f0"
+        roughness={0.8}
+        metalness={0.1}
       />
     </mesh>
   );
