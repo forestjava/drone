@@ -92,7 +92,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#444444'}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#333333'}
         >
-          Show Controls
+          Показать управление
         </button>
       </div>
     );
@@ -106,7 +106,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         backgroundColor: isControllerConnected ? '#00ff00' : '#ff0000',
         color: isControllerConnected ? '#000000' : '#ffffff'
       }}>
-        {isControllerConnected ? '🎮 Controller Connected' : '❌ No Controller'}
+        {isControllerConnected ? '🎮 Контроллер подключен' : '❌ Нет контроллера'}
       </div>
 
       <div style={{
@@ -121,7 +121,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
           fontFamily: 'Inter, sans-serif',
           fontSize: '16px'
         }}>
-          Drone Controls
+          Управление дроном
         </h3>
         <button
           style={{ ...buttonStyle, padding: '4px 8px', fontSize: '10px' }}
@@ -129,14 +129,14 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#444444'}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#333333'}
         >
-          Hide
+          Скрыть
         </button>
       </div>
 
       {/* Throttle Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Throttle</span>
+          <span>Газ</span>
           <span style={valueStyle}>{throttle.toFixed(0)}%</span>
         </div>
         <input
@@ -154,7 +154,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
       {/* Yaw Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Yaw</span>
+          <span>Рысканье</span>
           <span style={valueStyle}>{yaw.toFixed(0)}°</span>
         </div>
         <input
@@ -172,7 +172,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
       {/* Pitch Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Pitch</span>
+          <span>Тангаж</span>
           <span style={valueStyle}>{pitch.toFixed(0)}°</span>
         </div>
         <input
@@ -190,7 +190,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
       {/* Roll Control */}
       <div style={controlStyle}>
         <div style={labelStyle}>
-          <span>Roll</span>
+          <span>Крен</span>
           <span style={valueStyle}>{roll.toFixed(0)}°</span>
         </div>
         <input
@@ -217,7 +217,7 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#444444'}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#333333'}
         >
-          Reset Position
+          Сбросить позицию
         </button>
       </div>
 
@@ -232,11 +232,11 @@ export default function DroneControls({ droneState, isControllerConnected }: Dro
         fontFamily: 'Inter, sans-serif',
         lineHeight: '1.4'
       }}>
-        <strong>Controls:</strong><br />
-        • Throttle: Vertical movement<br />
-        • Yaw: Rotation around vertical axis<br />
-        • Pitch: Forward/backward tilt<br />
-        • Roll: Left/right tilt
+        <strong>Управление:</strong><br />
+        • Газ: Вертикальное движение<br />
+        • Рысканье: Поворот вокруг вертикальной оси<br />
+        • Тангаж: Наклон вперед/назад<br />
+        • Крен: Наклон влево/вправо
       </div>
     </div >
   );

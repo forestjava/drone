@@ -81,7 +81,7 @@ function App() {
               className="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded"
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
-              Battle Drone Simulator
+              Симулятор боевого дрона
             </div>
           </>
         )}
