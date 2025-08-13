@@ -85,16 +85,16 @@ export function BrandedPlatform() {
     canvas.height = 1024;
     const ctx = canvas.getContext('2d')!;
     
-    // Base concrete texture
-    ctx.fillStyle = '#D5D5D5';
+    // Base green ground texture
+    ctx.fillStyle = '#2D5C2D';
     ctx.fillRect(0, 0, 1024, 1024);
     
-    // Add concrete texture pattern
+    // Add grass texture pattern
     for (let i = 0; i < 500; i++) {
       const x = Math.random() * 1024;
       const y = Math.random() * 1024;
       const size = Math.random() * 3 + 1;
-      ctx.fillStyle = `rgba(${160 + Math.random() * 40}, ${160 + Math.random() * 40}, ${160 + Math.random() * 40}, 0.3)`;
+      ctx.fillStyle = `rgba(${50 + Math.random() * 30}, ${120 + Math.random() * 40}, ${50 + Math.random() * 30}, 0.4)`;
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.fill();
