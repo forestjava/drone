@@ -5,6 +5,7 @@ import { ControllerProvider, useController } from "@greact/controller";
 import DroneViewer from "./components/DroneViewer";
 import DroneControls from "./components/DroneControls";
 import ControllerIntegration from "./components/ControllerIntegration";
+import { SkyBackground, BrandedPlatform, UIBranding } from "./components/SceneBranding";
 import { useDroneState } from "./hooks/useDroneState";
 
 // Компонент для получения статуса контроллера
@@ -48,29 +49,15 @@ function App() {
                 powerPreference: "high-performance"
               }}
             >
-              <color attach="background" args={["#1a1a1a"]} />
-
-              {/* Lighting */}
-              <ambientLight intensity={0.8} />
-              <directionalLight
-                position={[10, 10, 5]}
-                intensity={1.5}
-                castShadow
-                shadow-mapSize-width={2048}
-                shadow-mapSize-height={2048}
-              />
-              <pointLight position={[-10, -10, -5]} intensity={0.8} />
-              <pointLight position={[10, -10, 5]} intensity={0.6} />
+              {/* Sky background and lighting */}
+              <SkyBackground />
 
               <Suspense fallback={null}>
                 <DroneViewer droneState={droneState} />
               </Suspense>
 
-              {/* Ground plane for reference */}
-              <mesh receiveShadow position={[0, -3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                <planeGeometry args={[20, 20]} />
-                <meshStandardMaterial color="#333333" />
-              </mesh>
+              {/* Branded platform with Russian flag */}
+              <BrandedPlatform />
             </Canvas>
 
             {/* Controller Integration and Controls */}
@@ -83,6 +70,9 @@ function App() {
             >
               Симулятор боевого дрона
             </div>
+
+            {/* Branding elements */}
+            <UIBranding />
           </>
         )}
       </div>
