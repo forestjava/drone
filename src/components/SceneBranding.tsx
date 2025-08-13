@@ -1,6 +1,51 @@
 import React from 'react';
+import * as THREE from 'three';
 
-// Sky background component
+// Cloud component
+function Cloud({ position, scale = 1 }: { position: [number, number, number], scale?: number }) {
+  const cloudRef = React.useRef<THREE.Group>(null);
+
+  // Gentle rotation animation
+  React.useEffect(() => {
+    if (cloudRef.current) {
+      const animate = () => {
+        if (cloudRef.current) {
+          cloudRef.current.rotation.y += 0.001;
+        }
+        requestAnimationFrame(animate);
+      };
+      animate();
+    }
+  }, []);
+
+  return (
+    <group ref={cloudRef} position={position} scale={scale}>
+      {/* Multiple spheres to create cloud shape */}
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[1.5, 16, 16]} />
+        <meshLambertMaterial color="#ffffff" transparent opacity={0.8} />
+      </mesh>
+      <mesh position={[1.2, 0.3, 0.5]}>
+        <sphereGeometry args={[1.2, 16, 16]} />
+        <meshLambertMaterial color="#ffffff" transparent opacity={0.7} />
+      </mesh>
+      <mesh position={[-1, 0.2, -0.3]}>
+        <sphereGeometry args={[1.0, 16, 16]} />
+        <meshLambertMaterial color="#ffffff" transparent opacity={0.75} />
+      </mesh>
+      <mesh position={[0.5, -0.5, 0.8]}>
+        <sphereGeometry args={[0.8, 16, 16]} />
+        <meshLambertMaterial color="#f8f8f8" transparent opacity={0.6} />
+      </mesh>
+      <mesh position={[-0.8, -0.3, -0.6]}>
+        <sphereGeometry args={[0.9, 16, 16]} />
+        <meshLambertMaterial color="#ffffff" transparent opacity={0.65} />
+      </mesh>
+    </group>
+  );
+}
+
+// Sky background component with clouds
 export function SkyBackground() {
   return (
     <>
@@ -22,6 +67,16 @@ export function SkyBackground() {
         intensity={0.8}
         color="#CCE7FF"
       />
+
+      {/* Clouds scattered in the sky */}
+      <Cloud position={[15, 12, -20]} scale={1.2} />
+      <Cloud position={[-18, 15, -25]} scale={0.8} />
+      <Cloud position={[25, 18, -30]} scale={1.0} />
+      <Cloud position={[-12, 20, -15]} scale={1.4} />
+      <Cloud position={[8, 14, -35]} scale={0.9} />
+      <Cloud position={[-25, 16, -18]} scale={1.1} />
+      <Cloud position={[20, 22, -28]} scale={0.7} />
+      <Cloud position={[-8, 17, -22]} scale={1.3} />
     </>
   );
 }
