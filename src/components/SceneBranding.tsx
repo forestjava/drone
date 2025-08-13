@@ -76,14 +76,103 @@ export function SkyBackground() {
   );
 }
 
-// Clean platform 
+// Industrial Alabuga factory platform
 export function BrandedPlatform() {
+  // Create industrial concrete texture with markings
+  const canvas = React.useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d')!;
+    
+    // Base concrete texture
+    ctx.fillStyle = '#D5D5D5';
+    ctx.fillRect(0, 0, 1024, 1024);
+    
+    // Add concrete texture pattern
+    for (let i = 0; i < 500; i++) {
+      const x = Math.random() * 1024;
+      const y = Math.random() * 1024;
+      const size = Math.random() * 3 + 1;
+      ctx.fillStyle = `rgba(${160 + Math.random() * 40}, ${160 + Math.random() * 40}, ${160 + Math.random() * 40}, 0.3)`;
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Add yellow warehouse zone markings
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 8;
+    
+    // Warehouse grid lines
+    for (let i = 1; i < 4; i++) {
+      // Vertical lines
+      ctx.beginPath();
+      ctx.moveTo((1024 / 4) * i, 100);
+      ctx.lineTo((1024 / 4) * i, 924);
+      ctx.stroke();
+    }
+    
+    for (let i = 1; i < 4; i++) {
+      // Horizontal lines
+      ctx.beginPath();
+      ctx.moveTo(100, (1024 / 4) * i);
+      ctx.lineTo(924, (1024 / 4) * i);
+      ctx.stroke();
+    }
+    
+    // Landing zone circle in center
+    ctx.beginPath();
+    ctx.arc(512, 512, 80, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    // Inner circle
+    ctx.beginPath();
+    ctx.arc(512, 512, 60, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    // Add "ALABUGA" text at bottom
+    ctx.fillStyle = '#1E3A8A';
+    ctx.font = 'bold 48px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('АЛАБУГА', 512, 900);
+    
+    // Add zone numbers
+    ctx.fillStyle = '#FFD700';
+    ctx.font = 'bold 32px Arial';
+    ctx.fillText('A1', 256, 256);
+    ctx.fillText('A2', 768, 256);
+    ctx.fillText('B1', 256, 768);
+    ctx.fillText('B2', 768, 768);
+    
+    // Add safety markings
+    ctx.strokeStyle = '#FF4444';
+    ctx.lineWidth = 4;
+    ctx.setLineDash([20, 20]);
+    
+    // Safety perimeter
+    ctx.beginPath();
+    ctx.rect(50, 50, 924, 924);
+    ctx.stroke();
+    
+    ctx.setLineDash([]);
+    
+    return canvas;
+  }, []);
+
+  const texture = React.useMemo(() => {
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    return texture;
+  }, [canvas]);
+
   return (
     <mesh receiveShadow position={[0, -3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[20, 20]} />
+      <planeGeometry args={[30, 30]} />
       <meshStandardMaterial 
-        color="#f0f0f0"
-        roughness={0.8}
+        map={texture}
+        roughness={0.9}
         metalness={0.1}
       />
     </mesh>
