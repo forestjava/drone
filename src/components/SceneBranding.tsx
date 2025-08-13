@@ -1,22 +1,17 @@
 import React from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 
 // Cloud component
 function Cloud({ position, scale = 1 }: { position: [number, number, number], scale?: number }) {
   const cloudRef = React.useRef<THREE.Group>(null);
 
-  // Gentle rotation animation
-  React.useEffect(() => {
+  // Gentle rotation animation using useFrame
+  useFrame((state) => {
     if (cloudRef.current) {
-      const animate = () => {
-        if (cloudRef.current) {
-          cloudRef.current.rotation.y += 0.001;
-        }
-        requestAnimationFrame(animate);
-      };
-      animate();
+      cloudRef.current.rotation.y += 0.002;
     }
-  }, []);
+  });
 
   return (
     <group ref={cloudRef} position={position} scale={scale}>
@@ -68,15 +63,19 @@ export function SkyBackground() {
         color="#CCE7FF"
       />
 
-      {/* Clouds scattered in the sky */}
-      <Cloud position={[15, 12, -20]} scale={1.2} />
-      <Cloud position={[-18, 15, -25]} scale={0.8} />
-      <Cloud position={[25, 18, -30]} scale={1.0} />
-      <Cloud position={[-12, 20, -15]} scale={1.4} />
-      <Cloud position={[8, 14, -35]} scale={0.9} />
-      <Cloud position={[-25, 16, -18]} scale={1.1} />
-      <Cloud position={[20, 22, -28]} scale={0.7} />
-      <Cloud position={[-8, 17, -22]} scale={1.3} />
+      {/* Test visible cloud - close to camera */}
+      <mesh position={[0, 8, -8]}>
+        <sphereGeometry args={[2, 16, 16]} />
+        <meshLambertMaterial color="#ffffff" transparent opacity={0.7} />
+      </mesh>
+
+      {/* More test clouds */}
+      <Cloud position={[8, 8, -12]} scale={2.0} />
+      <Cloud position={[-10, 10, -15]} scale={1.5} />
+      <Cloud position={[12, 12, -18]} scale={1.8} />
+      <Cloud position={[-15, 15, -10]} scale={2.2} />
+      <Cloud position={[5, 18, -20]} scale={1.3} />
+      <Cloud position={[-8, 6, -14]} scale={1.7} />
     </>
   );
 }
